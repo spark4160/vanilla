@@ -189,6 +189,20 @@ public class MediaAdapter
 			mSortEntries = new int[] { R.string.title, R.string.date_added };
 			mAdapterSortValues = new String[] { MediaLibrary.ContributorColumns.ARTIST_SORT+" %1$s", MediaLibrary.ContributorColumns.MTIME+" %1$s" };
 			break;
+		case MediaUtils.TYPE_ALBARTIST:
+			mSource = MediaLibrary.VIEW_ALBUMARTISTS;
+			mFields = new String[] { MediaLibrary.ContributorColumns.ALBUMARTIST };
+			mFieldKeys = new String[] { MediaLibrary.ContributorColumns.ALBUMARTIST_SORT };
+			mSortEntries = new int[] { R.string.title, R.string.date_added };
+			mAdapterSortValues = new String[] { MediaLibrary.ContributorColumns.ALBUMARTIST_SORT+" %1$s", MediaLibrary.ContributorColumns.MTIME+" %1$s" };
+			break;
+		case MediaUtils.TYPE_COMPOSER:
+			mSource = MediaLibrary.VIEW_COMPOSERS;
+			mFields = new String[] { MediaLibrary.ContributorColumns.COMPOSER };
+			mFieldKeys = new String[] { MediaLibrary.ContributorColumns.COMPOSER_SORT };
+			mSortEntries = new int[] { R.string.title, R.string.date_added };
+			mAdapterSortValues = new String[] { MediaLibrary.ContributorColumns.COMPOSER_SORT+" %1$s", MediaLibrary.ContributorColumns.MTIME+" %1$s" };
+			break;
 		case MediaUtils.TYPE_ALBUM:
 			mSource = MediaLibrary.VIEW_ALBUMS_ARTISTS;
 			mFields = new String[] { MediaLibrary.AlbumColumns.ALBUM, MediaLibrary.ContributorColumns.ARTIST };
@@ -308,7 +322,7 @@ public class MediaAdapter
 		String sortRaw = mAdapterSortValues[mode];
 		if (returnSongs) {
 			// songs returned from the artist tab should also sort by album
-			if (mType == MediaUtils.TYPE_ARTIST)
+			if (mType == MediaUtils.TYPE_ARTIST) // fixme: composer?
 				sortRaw += ", "+MediaLibrary.AlbumColumns.ALBUM_SORT+" %1$s";
 			// and this is for all types:
 			sortRaw += ", "+MediaLibrary.SongColumns.DISC_NUMBER+", "+MediaLibrary.SongColumns.SONG_NUMBER;
@@ -442,6 +456,14 @@ public class MediaAdapter
 		case MediaUtils.TYPE_ARTIST:
 			fields = new String[] { cursor.getString(2) };
 			data = String.format("%s=%d", MediaLibrary.ContributorColumns.ARTIST_ID, id);
+			break;
+		case MediaUtils.TYPE_ALBARTIST:
+			fields = new String[] { cursor.getString(2) };
+			data = String.format("%s=%d", MediaLibrary.ContributorColumns.ALBUMARTIST_ID, id);
+			break;
+		case MediaUtils.TYPE_COMPOSER:
+			fields = new String[] { cursor.getString(2) };
+			data = String.format("%s=%d", MediaLibrary.ContributorColumns.COMPOSER_ID, id);
 			break;
 		case MediaUtils.TYPE_ALBUM:
 			fields = new String[] { cursor.getString(3), cursor.getString(2) };
