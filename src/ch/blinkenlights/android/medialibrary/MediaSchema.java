@@ -171,6 +171,30 @@ public class MediaSchema {
 	  +" ;";
 
 	/**
+	 * View wich includes SONGS_ALBUMS_ARTISTS + albumartist information
+	 */
+	private static final String VIEW_CREATE_SONGS_ALBUMS_ALBUMARTISTS = "CREATE VIEW "+ MediaLibrary.VIEW_SONGS_ALBUMS_ALBUMARTISTS+" AS "
+	  + "SELECT *, "+ VIEW_ALBUMARTIST_SELECT +" FROM "+MediaLibrary.VIEW_SONGS_ALBUMS_ARTISTS
+	  +" LEFT JOIN "+MediaLibrary.TABLE_CONTRIBUTORS_SONGS+" as __albumartists"
+	  +" ON  __albumartists."+MediaLibrary.ContributorSongColumns.ROLE+"="+MediaLibrary.ROLE_ALBUMARTIST
+	  +" AND __albumartists."+MediaLibrary.ContributorSongColumns.SONG_ID+" = "+MediaLibrary.VIEW_SONGS_ALBUMS_ARTISTS+"."+MediaLibrary.SongColumns._ID
+	  +" LEFT JOIN "+MediaLibrary.TABLE_CONTRIBUTORS+" AS _albumartist ON"
+	  +"  _albumartist."+MediaLibrary.ContributorColumns._ID+" = __albumartists."+MediaLibrary.ContributorSongColumns._CONTRIBUTOR_ID
+	  +" ;";
+
+	/**
+	 * View wich includes SONGS_ALBUMS_ARTISTS + composer information
+	 */
+	private static final String VIEW_CREATE_SONGS_ALBUMS_COMPOSERS = "CREATE VIEW "+ MediaLibrary.VIEW_SONGS_ALBUMS_COMPOSERS+" AS "
+	  + "SELECT *, "+ VIEW_COMPOSER_SELECT +" FROM "+MediaLibrary.VIEW_SONGS_ALBUMS_ARTISTS
+	  +" LEFT JOIN "+MediaLibrary.TABLE_CONTRIBUTORS_SONGS+" as __composers"
+	  +" ON  __composers."+MediaLibrary.ContributorSongColumns.ROLE+"="+MediaLibrary.ROLE_COMPOSER
+	  +" AND __composers."+MediaLibrary.ContributorSongColumns.SONG_ID+" = "+MediaLibrary.VIEW_SONGS_ALBUMS_ARTISTS+"."+MediaLibrary.SongColumns._ID
+	  +" LEFT JOIN "+MediaLibrary.TABLE_CONTRIBUTORS+" AS _composer ON"
+	  +"  _composer."+MediaLibrary.ContributorColumns._ID+" = __composers."+MediaLibrary.ContributorSongColumns._CONTRIBUTOR_ID
+	  +" ;";
+
+	/**
 	 * View which includes album and artist information
 	 */
 	private static final String VIEW_CREATE_ALBUMS_ARTISTS = "CREATE VIEW "+ MediaLibrary.VIEW_ALBUMS_ARTISTS+ " AS "
@@ -237,6 +261,8 @@ public class MediaSchema {
 		dbh.execSQL(INDEX_IDX_PLAYLIST_ID);
 		dbh.execSQL(INDEX_IDX_PLAYLIST_ID_SONG);
 		dbh.execSQL(VIEW_CREATE_SONGS_ALBUMS_ARTISTS);
+		dbh.execSQL(VIEW_CREATE_SONGS_ALBUMS_ALBUMARTISTS);
+		dbh.execSQL(VIEW_CREATE_SONGS_ALBUMS_COMPOSERS);
 		dbh.execSQL(VIEW_CREATE_ALBUMS_ARTISTS);
 		dbh.execSQL(VIEW_CREATE_ARTISTS);
 		dbh.execSQL(VIEW_CREATE_ALBUMARTISTS);
@@ -278,6 +304,8 @@ public class MediaSchema {
 		if (oldVersion < 20170217) {
 			dbh.execSQL(VIEW_CREATE_ALBUMARTISTS);
 			dbh.execSQL(VIEW_CREATE_COMPOSERS);
+			dbh.execSQL(VIEW_CREATE_SONGS_ALBUMS_ALBUMARTISTS);
+			dbh.execSQL(VIEW_CREATE_SONGS_ALBUMS_COMPOSERS);
 		}
 
 	}

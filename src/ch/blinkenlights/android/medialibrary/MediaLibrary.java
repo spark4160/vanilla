@@ -29,21 +29,23 @@ import java.io.File;
 
 public class MediaLibrary  {
 
-	public static final String TABLE_SONGS                = "songs";
-	public static final String TABLE_ALBUMS               = "albums";
-	public static final String TABLE_CONTRIBUTORS         = "contributors";
-	public static final String TABLE_CONTRIBUTORS_SONGS   = "contributors_songs";
-	public static final String TABLE_GENRES               = "genres";
-	public static final String TABLE_GENRES_SONGS         = "genres_songs";
-	public static final String TABLE_PLAYLISTS            = "playlists";
-	public static final String TABLE_PLAYLISTS_SONGS      = "playlists_songs";
-	public static final String TABLE_PREFERENCES          = "preferences";
-	public static final String VIEW_ARTISTS               = "_artists";
-	public static final String VIEW_ALBUMARTISTS          = "_albumartists";
-	public static final String VIEW_COMPOSERS             = "_composers";
-	public static final String VIEW_ALBUMS_ARTISTS        = "_albums_artists";
-	public static final String VIEW_SONGS_ALBUMS_ARTISTS  = "_songs_albums_artists";
-	public static final String VIEW_PLAYLIST_SONGS        = "_playlists_songs";
+	public static final String TABLE_SONGS                    = "songs";
+	public static final String TABLE_ALBUMS                   = "albums";
+	public static final String TABLE_CONTRIBUTORS             = "contributors";
+	public static final String TABLE_CONTRIBUTORS_SONGS       = "contributors_songs";
+	public static final String TABLE_GENRES                   = "genres";
+	public static final String TABLE_GENRES_SONGS             = "genres_songs";
+	public static final String TABLE_PLAYLISTS                = "playlists";
+	public static final String TABLE_PLAYLISTS_SONGS          = "playlists_songs";
+	public static final String TABLE_PREFERENCES              = "preferences";
+	public static final String VIEW_ARTISTS                   = "_artists";
+	public static final String VIEW_ALBUMARTISTS              = "_albumartists";
+	public static final String VIEW_COMPOSERS                 = "_composers";
+	public static final String VIEW_ALBUMS_ARTISTS            = "_albums_artists";
+	public static final String VIEW_SONGS_ALBUMS_ARTISTS      = "_songs_albums_artists";
+	public static final String VIEW_SONGS_ALBUMS_ALBUMARTISTS = "_songs_albums_artists_albumartists";
+	public static final String VIEW_SONGS_ALBUMS_COMPOSERS    = "_songs_albums_artists_composers";
+	public static final String VIEW_PLAYLIST_SONGS            = "_playlists_songs";
 
 	public static final int ROLE_ARTIST                   = 0;
 	public static final int ROLE_COMPOSER                 = 1;
