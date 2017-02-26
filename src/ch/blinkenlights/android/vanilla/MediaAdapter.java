@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2016 Adrian Ulrich <adrian@blinkenlights.ch>
+ * Copyright (C) 2015-2017 Adrian Ulrich <adrian@blinkenlights.ch>
  * Copyright (C) 2010, 2011 Christopher Eby <kreed@kreed.org>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -99,6 +99,10 @@ public class MediaAdapter
 	 */
 	private String mSource;
 	/**
+	 * The table / view to use if we query all songs in the adapter
+	 */
+	private String mSongsSource;
+	/**
 	 * The fields to use from the content provider. The last field will be
 	 * displayed in the MediaView, as will the first field if there are
 	 * multiple fields. Other fields will be used for searching.
@@ -184,6 +188,7 @@ public class MediaAdapter
 		switch (type) {
 		case MediaUtils.TYPE_ARTIST:
 			mSource = MediaLibrary.VIEW_ARTISTS;
+			mSongsSource = MediaLibrary.VIEW_SONGS_ALBUMS_ARTISTS;
 			mFields = new String[] { MediaLibrary.ContributorColumns.ARTIST };
 			mFieldKeys = new String[] { MediaLibrary.ContributorColumns.ARTIST_SORT };
 			mSortEntries = new int[] { R.string.title, R.string.date_added };
@@ -191,6 +196,7 @@ public class MediaAdapter
 			break;
 		case MediaUtils.TYPE_ALBARTIST:
 			mSource = MediaLibrary.VIEW_ALBUMARTISTS;
+			mSongsSource = MediaLibrary.VIEW_SONGS_ALBUMS_ALBUMARTISTS;
 			mFields = new String[] { MediaLibrary.ContributorColumns.ALBUMARTIST };
 			mFieldKeys = new String[] { MediaLibrary.ContributorColumns.ALBUMARTIST_SORT };
 			mSortEntries = new int[] { R.string.title, R.string.date_added };
@@ -198,6 +204,7 @@ public class MediaAdapter
 			break;
 		case MediaUtils.TYPE_COMPOSER:
 			mSource = MediaLibrary.VIEW_COMPOSERS;
+			mSongsSource = MediaLibrary.VIEW_SONGS_ALBUMS_COMPOSERS;
 			mFields = new String[] { MediaLibrary.ContributorColumns.COMPOSER };
 			mFieldKeys = new String[] { MediaLibrary.ContributorColumns.COMPOSER_SORT };
 			mSortEntries = new int[] { R.string.title, R.string.date_added };
@@ -378,7 +385,7 @@ public class MediaAdapter
 		}
 
 		if (returnSongs == true) {
-			source = MediaLibrary.VIEW_SONGS_ALBUMS_ARTISTS;
+			source = mSongsSource;
 		} else {
 			enrichedProjection = Arrays.copyOf(projection, projection.length + 1);
 			enrichedProjection[projection.length] = getFirstSortColumn();
