@@ -19,30 +19,52 @@ apply plugin: 'com.android.application'
 android {
     lintOptions {
         disable 'MissingTranslation'
+        disable 'ExtraTranslation'
     }
 
-    compileSdkVersion 24
-    buildToolsVersion "24.0.2"
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
 
     defaultConfig {
         applicationId "ch.blinkenlights.android.vanilla"
         minSdkVersion 15
-        targetSdkVersion 24
+        targetSdkVersion 25
     }
 
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'
             java.srcDirs = ['src']
-            resources.srcDirs = ['src']
             aidl.srcDirs = ['src']
-            renderscript.srcDirs = ['src']
             res.srcDirs = ['res']
             assets.srcDirs = ['assets']
+        }
+
+        nightly {
+            res.srcDirs = ['resNightly']
         }
     }
 
     buildTypes {
+        nightly {
+            def buildId   = 'date +%s'.execute().in.readLines()[0]
+            def buildDate = 'date'.execute().in.readLines()[0]
+            def buildHost = 'hostname'.execute().in.readLines()[0]
+
+            versionNameSuffix '-' + buildId
+            applicationIdSuffix '.nightly'
+
+            preBuild.finalizedBy 'customPrepareResources'
+
+            task ('customPrepareResources') {
+                doLast {
+                    println 'Replacing `about` info to nightly...'
+                    def about = file('assets/about.html')
+                    about.text = about.text.replaceAll('<b>Version.*', "<b>Nightly build ID:</b> ${buildId}<br><i>Built on ${buildHost} at ${buildDate}</i><br><br>")
+                }
+            }
+        }
+
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
