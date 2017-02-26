@@ -240,6 +240,10 @@ public class MediaLibraryBackend extends SQLiteOpenHelper {
 	 */
 	Cursor query (boolean distinct, String table, String[] columns, String selection, String[] selectionArgs, String groupBy, String having, String orderBy, String limit) {
 
+		if (MediaLibrary.VIEW_SONGS_ALBUMS_ARTISTS_HUGE.equals(table)) {
+			Log.v("VanillaMusic", "+++ warning : using HUGE table in genquery!");
+		}
+
 		if (selection != null) {
 			if (MediaLibrary.VIEW_SONGS_ALBUMS_ARTISTS.equals(table)) {
 				// artist matches in the song-view are costy: try to give sqlite a hint
@@ -277,8 +281,7 @@ public class MediaLibraryBackend extends SQLiteOpenHelper {
 				final String songsQuery = buildSongIdFromGenreSelect(genreId);
 
 				if(table.equals(MediaLibrary.VIEW_SONGS_ALBUMS_ARTISTS)      ||
-				   table.equals(MediaLibrary.VIEW_SONGS_ALBUMS_ALBUMARTISTS) ||
-				   table.equals(MediaLibrary.VIEW_SONGS_ALBUMS_COMPOSERS)    ) {
+				   table.equals(MediaLibrary.VIEW_SONGS_ALBUMS_ARTISTS_HUGE) ) {
 					selection += MediaLibrary.SongColumns._ID+" IN ("+songsQuery+") ";
 				}
 
@@ -294,12 +297,14 @@ public class MediaLibraryBackend extends SQLiteOpenHelper {
 
 				if (table.equals(MediaLibrary.VIEW_ALBUMARTISTS)) {
 					selection += MediaLibrary.ContributorColumns.ALBUMARTIST_ID+" IN ("+
-						buildSongIdFromGenreSelect(MediaLibrary.ContributorColumns.ALBUMARTIST_ID, MediaLibrary.VIEW_SONGS_ALBUMS_ALBUMARTISTS, songsQuery)+") ";
+						buildSongIdFromGenreSelect(MediaLibrary.ContributorColumns.ALBUMARTIST_ID, MediaLibrary.VIEW_SONGS_ALBUMS_ARTISTS_HUGE, songsQuery)+") ";
+					Log.v("VanillaMusic", "+++ warning: huge genrequery for albumartist!");
 				}
 
 				if (table.equals(MediaLibrary.VIEW_COMPOSERS)) {
 					selection += MediaLibrary.ContributorColumns.COMPOSER_ID+" IN ("+
-						buildSongIdFromGenreSelect(MediaLibrary.ContributorColumns.COMPOSER_ID, MediaLibrary.VIEW_SONGS_ALBUMS_COMPOSERS, songsQuery)+") ";
+						buildSongIdFromGenreSelect(MediaLibrary.ContributorColumns.COMPOSER_ID, MediaLibrary.VIEW_SONGS_ALBUMS_ARTISTS_HUGE, songsQuery)+") ";
+					Log.v("VanillaMusic", "+++ warning: huge genrequery composer!");
 				}
 
 			}
