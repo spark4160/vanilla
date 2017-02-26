@@ -74,10 +74,14 @@ public class LibraryPagerAdapter
 	/**
 	 * Default tab order.
 	 */
-	// FIXME: Must reset defaults and have an option to have unchecked items by default
-	public static final int[] DEFAULT_ORDER = { MediaUtils.TYPE_ARTIST, MediaUtils.TYPE_ALBARTIST, MediaUtils.TYPE_COMPOSER,
-	                                            MediaUtils.TYPE_ALBUM, MediaUtils.TYPE_SONG, MediaUtils.TYPE_PLAYLIST,
-	                                            MediaUtils.TYPE_GENRE, MediaUtils.TYPE_FILE };
+	public static final int[] DEFAULT_TAB_ORDER = { MediaUtils.TYPE_ARTIST, MediaUtils.TYPE_ALBARTIST, MediaUtils.TYPE_COMPOSER,
+	                                                MediaUtils.TYPE_ALBUM, MediaUtils.TYPE_SONG, MediaUtils.TYPE_PLAYLIST,
+	                                                MediaUtils.TYPE_GENRE, MediaUtils.TYPE_FILE };
+	/**
+	 * The default visibility of tabs
+	 */
+	public static final boolean[] DEFAULT_TAB_VISIBILITY = { true, false, false, true, true, true, true, true };
+
 	/**
 	 * The user-chosen tab order.
 	 */
@@ -245,27 +249,30 @@ public class LibraryPagerAdapter
 	public boolean loadTabOrder()
 	{
 		String in = PlaybackService.getSettings(mActivity).getString(PrefKeys.TAB_ORDER, PrefDefaults.TAB_ORDER);
-		int[] order;
-		int count;
-		if (in == null || in.length() != MAX_ADAPTER_COUNT) {
-			order = DEFAULT_ORDER;
-			count = MAX_ADAPTER_COUNT;
-		} else {
+		int[] order = new int[MAX_ADAPTER_COUNT];
+		int count = 0;
+		if (in != null && in.length() == MAX_ADAPTER_COUNT) {
 			char[] chars = in.toCharArray();
 			order = new int[MAX_ADAPTER_COUNT];
-			count = 0;
 			for (int i = 0; i != MAX_ADAPTER_COUNT; ++i) {
 				char v = chars[i];
 				if (v >= 128) {
 					v -= 128;
 					if (v >= MediaUtils.TYPE_COUNT) {
-						// invalid media type; use default order
-						order = DEFAULT_ORDER;
-						count = MAX_ADAPTER_COUNT;
+						// invalid media type, ignore all data
+						count = 0;
 						break;
 					}
 					order[count++] = v;
 				}
+			}
+		}
+
+		// set default tabs if none were loaded
+		if (count == 0) {
+			for (int i=0; i != MAX_ADAPTER_COUNT; i++) {
+				if (DEFAULT_TAB_VISIBILITY[i])
+					order[count++] = DEFAULT_TAB_ORDER[i];
 			}
 		}
 
