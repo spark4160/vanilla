@@ -49,11 +49,11 @@ public class MediaLibraryBackend extends SQLiteOpenHelper {
 	 */
 	private static final Pattern sQueryMatchArtistSearch = Pattern.compile("(^|.+ )"+MediaLibrary.ContributorColumns.ARTIST_ID+"=(\\d+)$");
 	/**
-	 * Regexp to detect costy artist_id queries which we can optimize
+	 * Regexp to detect costy albumartist_id queries which we can optimize
 	 */
 	private static final Pattern sQueryMatchAlbArtistSearch = Pattern.compile("(^|.+ )"+MediaLibrary.ContributorColumns.ALBUMARTIST_ID+"=(\\d+)$");
 	/**
-	 * Regexp to detect costy artist_id queries which we can optimize
+	 * Regexp to detect costy composer_id queries which we can optimize
 	 */
 	private static final Pattern sQueryMatchComposerSearch = Pattern.compile("(^|.+ )"+MediaLibrary.ContributorColumns.COMPOSER_ID+"=(\\d+)$");
 
@@ -325,6 +325,13 @@ public class MediaLibraryBackend extends SQLiteOpenHelper {
 		return cursor;
 	}
 
+	/**
+	 * Detects queries for artists, composers and albumartists and returns the
+	 * role of the contributor.
+	 *
+	 * @param sql the raw sql query
+	 * @return String[]{ sql-part, contributor-id, contributor-role }
+	 */
 	private String[] extractVirtualColumn(String sql) {
 		final Pattern[] pattern = new Pattern[]{ sQueryMatchArtistSearch, sQueryMatchComposerSearch, sQueryMatchAlbArtistSearch };
 		final int[] roles = { MediaLibrary.ROLE_ARTIST, MediaLibrary.ROLE_COMPOSER, MediaLibrary.ROLE_ALBUMARTIST };
